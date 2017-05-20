@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.ResClassMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.ResClass" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="resname" property="resname" jdbcType="VARCHAR" />
+    <result column="isbdydown" property="isbdydown" jdbcType="INTEGER" />
+    <result column="is360down" property="is360down" jdbcType="INTEGER" />
+    <result column="islocationdown" property="islocationdown" jdbcType="INTEGER" />
+    <result column="resdescription" property="resdescription" jdbcType="VARCHAR" />
+    <result column="respurl" property="respurl" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 资源类目表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, resname, isbdydown, is360down, islocationdown, resdescription, respurl
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_resclass
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, resname, isbdydown, is360down, islocationdown, resdescription, respurl
+    from j_resclass
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_resclass
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.ResClass" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_resclass (id, resname, isbdydown, 
+      is360down, islocationdown, resdescription, 
+      respurl)
+    values (#{id,jdbcType=INTEGER}, #{resname,jdbcType=VARCHAR}, #{isbdydown,jdbcType=INTEGER}, 
+      #{is360down,jdbcType=INTEGER}, #{islocationdown,jdbcType=INTEGER}, #{resdescription,jdbcType=VARCHAR}, 
+      #{respurl,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.ResClass" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_resclass
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="resname != null" >
+        resname,
+      </if>
+      <if test="isbdydown != null" >
+        isbdydown,
+      </if>
+      <if test="is360down != null" >
+        is360down,
+      </if>
+      <if test="islocationdown != null" >
+        islocationdown,
+      </if>
+      <if test="resdescription != null" >
+        resdescription,
+      </if>
+      <if test="respurl != null" >
+        respurl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="resname != null" >
+        #{resname,jdbcType=VARCHAR},
+      </if>
+      <if test="isbdydown != null" >
+        #{isbdydown,jdbcType=INTEGER},
+      </if>
+      <if test="is360down != null" >
+        #{is360down,jdbcType=INTEGER},
+      </if>
+      <if test="islocationdown != null" >
+        #{islocationdown,jdbcType=INTEGER},
+      </if>
+      <if test="resdescription != null" >
+        #{resdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="respurl != null" >
+        #{respurl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.ResClass" >
+    update j_resclass
+    <set >
+      <if test="resname != null" >
+        resname = #{resname,jdbcType=VARCHAR},
+      </if>
+      <if test="isbdydown != null" >
+        isbdydown = #{isbdydown,jdbcType=INTEGER},
+      </if>
+      <if test="is360down != null" >
+        is360down = #{is360down,jdbcType=INTEGER},
+      </if>
+      <if test="islocationdown != null" >
+        islocationdown = #{islocationdown,jdbcType=INTEGER},
+      </if>
+      <if test="resdescription != null" >
+        resdescription = #{resdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="respurl != null" >
+        respurl = #{respurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.ResClass" >
+    update j_resclass
+    set resname = #{resname,jdbcType=VARCHAR},
+      isbdydown = #{isbdydown,jdbcType=INTEGER},
+      is360down = #{is360down,jdbcType=INTEGER},
+      islocationdown = #{islocationdown,jdbcType=INTEGER},
+      resdescription = #{resdescription,jdbcType=VARCHAR},
+      respurl = #{respurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

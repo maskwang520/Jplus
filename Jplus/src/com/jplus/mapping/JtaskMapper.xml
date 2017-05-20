@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.JtaskMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.Jtask" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_title" property="taskTitle" jdbcType="VARCHAR" />
+    <result column="task_description" property="taskDescription" jdbcType="VARCHAR" />
+    <result column="task_reltime" property="taskReltime" jdbcType="TIMESTAMP" />
+    <result column="task_author_id" property="taskAuthorId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jplus.model.Jtask" extends="BaseResultMap" >
+    <result column="task_content" property="taskContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title Jplus常务任务表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, task_title, task_description, task_reltime, task_author_id
+  </sql>
+  
+  
+  <sql id="Blob_Column_List" >
+    task_content
+  </sql>
+  
+  <select id="getTaskTotal" resultType="int">
+		select count(*) from j_jtask
+	</select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from j_jtask
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select id, task_title, task_description, task_reltime, task_author_id, task_content
+    from j_jtask order by task_reltime DESC,task_author_id DESC
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_jtask
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Jtask" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_jtask (id, task_title, task_description, 
+      task_reltime, task_author_id, task_content
+      )
+    values (#{id,jdbcType=INTEGER}, #{taskTitle,jdbcType=VARCHAR}, #{taskDescription,jdbcType=VARCHAR}, 
+      #{taskReltime,jdbcType=TIMESTAMP}, #{taskAuthorId,jdbcType=INTEGER}, #{taskContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Jtask" >
+    
+    insert into j_jtask
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="taskTitle != null" >
+        task_title,
+      </if>
+      <if test="taskDescription != null" >
+        task_description,
+      </if>
+      <if test="taskReltime != null" >
+        task_reltime,
+      </if>
+      <if test="taskAuthorId != null" >
+        task_author_id,
+      </if>
+      <if test="taskContent != null" >
+        task_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="taskTitle != null" >
+        #{taskTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDescription != null" >
+        #{taskDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="taskReltime != null" >
+        #{taskReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAuthorId != null" >
+        #{taskAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="taskContent != null" >
+        #{taskContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Jtask" >
+    update j_jtask
+    <set >
+      <if test="taskTitle != null" >
+        task_title = #{taskTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDescription != null" >
+        task_description = #{taskDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="taskReltime != null" >
+        task_reltime = #{taskReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAuthorId != null" >
+        task_author_id = #{taskAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="taskContent != null" >
+        task_content = #{taskContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jplus.model.Jtask" >
+    update j_jtask
+    set task_title = #{taskTitle,jdbcType=VARCHAR},
+      task_description = #{taskDescription,jdbcType=VARCHAR},
+      task_reltime = #{taskReltime,jdbcType=TIMESTAMP},
+      task_author_id = #{taskAuthorId,jdbcType=INTEGER},
+      task_content = #{taskContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Jtask" >
+    update j_jtask
+    set task_title = #{taskTitle,jdbcType=VARCHAR},
+      task_description = #{taskDescription,jdbcType=VARCHAR},
+      task_reltime = #{taskReltime,jdbcType=TIMESTAMP},
+      task_author_id = #{taskAuthorId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getUserJtask" resultMap="resultUserJaskList" >
+    select j_jtask.id, j_jtask.task_title, j_jtask.task_description, j_jtask.task_reltime, j_jtask.task_author_id, j_jtask.task_content,
+    j_user.id, j_user.username, j_user.password, j_user.realname, j_user.certsnum, j_user.age, j_user.sex, j_user.regtime, j_user.qq, j_user.telephone, 
+    j_user.birthday, j_user.hobby, j_user.address, j_user.email, j_user.limits, j_user.identifys, j_user.userlevel_id, j_user.scores
+    from j_jtask,j_user  where j_jtask.task_author_id=j_user.id  order  by j_jtask.task_reltime DESC,j_jtask.task_author_id DESC limit #{startRow},#{endRow}
+  </select>
+  <resultMap  id="resultUserJaskList" type="com.jplus.model.Jtask">
+       <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_title" property="taskTitle" jdbcType="VARCHAR" />
+    <result column="task_description" property="taskDescription" jdbcType="VARCHAR" />
+    <result column="task_reltime" property="taskReltime" jdbcType="TIMESTAMP" />
+    <result column="task_author_id" property="taskAuthorId" jdbcType="INTEGER" />
+     <result column="task_content" property="taskContent" jdbcType="LONGVARCHAR" />
+         <association property="user" javaType="com.jplus.model.User">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="certsnum" property="certsnum" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="limits" property="limits" jdbcType="INTEGER" />
+    <result column="identifys" property="identifys" jdbcType="INTEGER" />
+    <result column="userlevel_id" property="userlevelId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="INTEGER" />        
+        </association>       
+    </resultMap>
+</mapper>

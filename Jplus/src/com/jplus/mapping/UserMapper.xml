@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="certsnum" property="certsnum" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="limits" property="limits" jdbcType="INTEGER" />
+    <result column="identifys" property="identifys" jdbcType="INTEGER" />
+    <result column="userlevel_id" property="userlevelId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    id, username, password, realname, certsnum, age, sex, regtime, qq, telephone, birthday, 
+    hobby, address, email, limits, identifys, userlevel_id, scores
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" 
+
+parameterType="java.lang.Integer" >
+     select id, username, password, realname, certsnum, age, sex, regtime, qq, telephone, 
+    birthday, hobby, address, email, limits, identifys, userlevel_id, scores
+    from j_user
+    where userlevel_id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findUserBylimits" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from j_user
+		where limits = #{limits,jdbcType=INTEGER}
+	</select>
+	
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, username, password, realname, certsnum, age, sex, regtime, qq, telephone, 
+    birthday, hobby, address, email, limits, identifys, userlevel_id, scores
+    from j_user
+  </select>
+  
+  <select id="findUserByuserId" resultMap="BaseResultMap" 
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from j_user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getUserByEmail" resultMap="BaseResultMap" 
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from j_user
+		where email = #{email,jdbcType=VARCHAR}
+	</select>
+  
+  <select id="findUserByNPL" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from j_user where username=#{0} and password=#{1} and limits=#{2}
+	</select>
+  
+  <select id="findAllUser" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from j_user
+	</select>
+  <delete id="deleteUserByuserId">
+		delete from j_user
+		where id = #{id}
+	</delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_user (username, password, 
+      realname, certsnum, age, 
+      sex, regtime, qq, 
+      telephone, birthday, hobby, 
+      address, email, limits, 
+      identifys, userlevel_id, scores
+      )
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{certsnum,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{sex,jdbcType=INTEGER}, #{regtime,jdbcType=TIMESTAMP}, #{qq,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{limits,jdbcType=INTEGER}, 
+      #{identifys,jdbcType=INTEGER}, #{userlevelId,jdbcType=INTEGER}, #{scores,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="realname != null" >
+        realname,
+      </if>
+      <if test="certsnum != null" >
+        certsnum,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="regtime != null" >
+        regtime,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="hobby != null" >
+        hobby,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="limits != null" >
+        limits,
+      </if>
+      <if test="identifys != null" >
+        identifys,
+      </if>
+      <if test="userlevelId != null" >
+        userlevel_id,
+      </if>
+      <if test="scores != null" >
+        scores,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null" >
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="certsnum != null" >
+        #{certsnum,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="regtime != null" >
+        #{regtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="limits != null" >
+        #{limits,jdbcType=INTEGER},
+      </if>
+      <if test="identifys != null" >
+        #{identifys,jdbcType=INTEGER},
+      </if>
+      <if test="userlevelId != null" >
+        #{userlevelId,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        #{scores,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+   <update id="addScore" parameterType="java.lang.Integer">
+      update j_user set scores=scores+#{score,jdbcType=INTEGER} where username=#{username,jdbcType=VARCHAR}
+   </update>
+   
+  <update id="updateScores" parameterType="com.jplus.model.User">
+		update j_user set
+		userlevel_id =
+		#{userlevelId,jdbcType=INTEGER},scores =
+		#{scores,jdbcType=INTEGER} where id
+		= #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateUserById" parameterType="com.jplus.model.User">
+		update j_user
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+
+			<if test="realname != null">
+				realname = #{realname,jdbcType=VARCHAR},
+			</if>
+			<if test="certsnum != null">
+				certsnum = #{certsnum,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="regtime != null">
+				regtime = #{regtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="qq != null">
+				qq = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=VARCHAR},
+			</if>
+			<if test="hobby != null">
+				hobby = #{hobby,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="limits != null">
+				limits = #{limits,jdbcType=INTEGER},
+			</if>
+			<if test="userlevelId != null">
+				userlevel_id = #{userlevelId,jdbcType=INTEGER},
+			</if>
+			<if test="scores != null">
+				scores = #{scores,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.User" >
+    update j_user 
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="certsnum != null" >
+        certsnum = #{certsnum,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="regtime != null" >
+        regtime = #{regtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        hobby = #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="limits != null" >
+        limits = #{limits,jdbcType=INTEGER},
+      </if>
+      <if test="identifys != null" >
+        identifys = #{identifys,jdbcType=INTEGER},
+      </if>
+      <if test="userlevelId != null" >
+        userlevel_id = #{userlevelId,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        scores = #{scores,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.User" >
+    update j_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      certsnum = #{certsnum,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=INTEGER},
+      regtime = #{regtime,jdbcType=TIMESTAMP},
+      qq = #{qq,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      hobby = #{hobby,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      limits = #{limits,jdbcType=INTEGER},
+      identifys = #{identifys,jdbcType=INTEGER},
+      userlevel_id = #{userlevelId,jdbcType=INTEGER},
+      scores = #{scores,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+      <select id="getUserMember"  resultMap="resultUserMemberList">
+       select j_user.id, j_user.username, j_user.password, j_user.realname, 
+
+j_user.certsnum, j_user.age, j_user.sex, j_user.regtime, j_user.qq, j_user.telephone, 
+    j_user.birthday, j_user.hobby, j_user.address, j_user.email, j_user.limits, 
+
+j_user.identifys, j_user.userlevel_id, j_user.scores,j_member.id, j_member.purl, 
+
+j_member.descriptions, j_member.cotents, j_member.nowaddress, j_member.nowwork, 
+
+j_member.myplan, j_member.knowsphere, 
+    j_member.skills, j_member.educations, j_member.workbk, 
+
+j_member.suggestions,j_member.qq, j_member.telephone, j_member.email, j_member.weixinnum, 
+
+j_member.blogs, 
+    j_member.viewtype, j_member.pwurl, j_member.indentifytime, j_member.user_id, 
+
+j_member.identify_id from j_user,j_member 
+              where j_user.id=j_member.user_id 
+    </select>
+     
+    <resultMap  id="resultUserMemberList" type="com.jplus.model.Member">
+       <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purl" property="purl" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+    <result column="cotents" property="cotents" jdbcType="VARCHAR" />
+    <result column="nowaddress" property="nowaddress" jdbcType="VARCHAR" />
+    <result column="nowwork" property="nowwork" jdbcType="VARCHAR" />
+    <result column="myplan" property="myplan" jdbcType="VARCHAR" />
+    <result column="knowsphere" property="knowsphere" jdbcType="VARCHAR" />
+    <result column="skills" property="skills" jdbcType="VARCHAR" />
+    <result column="educations" property="educations" jdbcType="VARCHAR" />
+    <result column="workbk" property="workbk" jdbcType="VARCHAR" />
+    <result column="suggestions" property="suggestions" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="weixinnum" property="weixinnum" jdbcType="VARCHAR" />
+    <result column="blogs" property="blogs" jdbcType="VARCHAR" />
+    <result column="viewtype" property="viewtype" jdbcType="INTEGER" />
+    <result column="pwurl" property="pwurl" jdbcType="VARCHAR" />
+    <result column="indentifytime" property="indentifytime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="identify_id" property="identifyId" jdbcType="INTEGER" />
+         <association property="user" javaType="com.jplus.model.User">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="certsnum" property="certsnum" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="limits" property="limits" jdbcType="INTEGER" />
+    <result column="identifys" property="identifys" jdbcType="INTEGER" />
+    <result column="userlevel_id" property="userlevelId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="INTEGER" />        
+        </association>       
+    </resultMap>
+    <select id="getOneUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select id, username, password, realname, certsnum, age, sex, regtime, qq, telephone, 
+    birthday, hobby, address, email, limits, identifys, userlevel_id, scores
+    from j_user where username=#{username}
+    </select>
+</mapper>

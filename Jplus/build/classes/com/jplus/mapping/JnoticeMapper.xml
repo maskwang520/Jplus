@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.JnoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.Jnotice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+    <result column="notice_reltime" property="noticeReltime" jdbcType="TIMESTAMP" />
+    <result column="notice_author_id" property="noticeAuthorId" jdbcType="INTEGER" />
+    <result column="notice_content" property="noticeContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title Jplus常务公告表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, notice_title, notice_reltime, notice_author_id
+  </sql>
+  
+  
+  <sql id="Blob_Column_List" >
+    notice_content
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from j_jnotice
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, notice_title, notice_reltime, notice_author_id, notice_content
+    from j_jnotice
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_jnotice
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Jnotice" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_jnotice (id, notice_title, notice_reltime, 
+      notice_author_id, notice_content)
+    values (#{id,jdbcType=INTEGER}, #{noticeTitle,jdbcType=VARCHAR}, #{noticeReltime,jdbcType=TIMESTAMP}, 
+      #{noticeAuthorId,jdbcType=INTEGER}, #{noticeContent,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Jnotice" >
+    insert into j_jnotice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="noticeTitle != null" >
+        notice_title,
+      </if>
+      <if test="noticeReltime != null" >
+        notice_reltime,
+      </if>
+      <if test="noticeAuthorId != null" >
+        notice_author_id,
+      </if>
+      <if test="noticeContent != null" >
+        notice_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="noticeTitle != null" >
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeReltime != null" >
+        #{noticeReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeAuthorId != null" >
+        #{noticeAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeContent != null" >
+        #{noticeContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Jnotice" >
+    update j_jnotice
+    <set >
+      <if test="noticeTitle != null" >
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeReltime != null" >
+        notice_reltime = #{noticeReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeAuthorId != null" >
+        notice_author_id = #{noticeAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeContent != null" >
+        notice_content = #{noticeContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jplus.model.Jnotice" >
+    update j_jnotice
+    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      notice_reltime = #{noticeReltime,jdbcType=TIMESTAMP},
+      notice_author_id = #{noticeAuthorId,jdbcType=INTEGER},
+      notice_content = #{noticeContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Jnotice" >
+    update j_jnotice
+    set notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      notice_reltime = #{noticeReltime,jdbcType=TIMESTAMP},
+      notice_author_id = #{noticeAuthorId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getUserJnotice"  resultMap="resultUserJnoticeList">
+      select j_jnotice.id, j_jnotice.notice_title, j_jnotice.notice_reltime, j_jnotice.notice_author_id, j_jnotice.notice_content,
+    j_user.id, j_user.username, j_user.password, j_user.realname, j_user.certsnum, j_user.age, j_user.sex, j_user.regtime, j_user.qq, j_user.telephone, 
+    j_user.birthday, j_user.hobby, j_user.address, j_user.email, j_user.limits, j_user.identifys, j_user.userlevel_id, j_user.scores
+    from j_jnotice,j_user where j_jnotice.notice_author_id=j_user.id
+    </select>
+    <resultMap  id="resultUserJnoticeList" type="com.jplus.model.Jnotice">
+       <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+    <result column="notice_reltime" property="noticeReltime" jdbcType="TIMESTAMP" />
+    <result column="notice_author_id" property="noticeAuthorId" jdbcType="INTEGER" />
+    <result column="notice_content" property="noticeContent" jdbcType="LONGVARCHAR" />
+         <association property="user" javaType="com.jplus.model.User">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="certsnum" property="certsnum" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="limits" property="limits" jdbcType="INTEGER" />
+    <result column="identifys" property="identifys" jdbcType="INTEGER" />
+    <result column="userlevel_id" property="userlevelId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="INTEGER" />        
+        </association>       
+    </resultMap>
+</mapper>

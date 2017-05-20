@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.VedioRecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.VedioRecommend" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="vr_name" property="vrName" jdbcType="VARCHAR" />
+    <result column="vr_title" property="vrTitle" jdbcType="VARCHAR" />
+    <result column="vr_url" property="vrUrl" jdbcType="VARCHAR" />
+    <result column="vr_purl" property="vrPurl" jdbcType="VARCHAR" />
+    <result column="vr_descriptions" property="vrDescriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 专辑推荐信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, vr_name, vr_title, vr_url, vr_purl, vr_descriptions
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_vediorecommend
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, vr_name, vr_title, vr_url, vr_purl, vr_descriptions
+    from j_vediorecommend
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_vediorecommend
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.VedioRecommend" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_vediorecommend (id, vr_name, vr_title, 
+      vr_url, vr_purl, vr_descriptions
+      )
+    values (#{id,jdbcType=INTEGER}, #{vrName,jdbcType=VARCHAR}, #{vrTitle,jdbcType=VARCHAR}, 
+      #{vrUrl,jdbcType=VARCHAR}, #{vrPurl,jdbcType=VARCHAR}, #{vrDescriptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.VedioRecommend" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_vediorecommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="vrName != null" >
+        vr_name,
+      </if>
+      <if test="vrTitle != null" >
+        vr_title,
+      </if>
+      <if test="vrUrl != null" >
+        vr_url,
+      </if>
+      <if test="vrPurl != null" >
+        vr_purl,
+      </if>
+      <if test="vrDescriptions != null" >
+        vr_descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="vrName != null" >
+        #{vrName,jdbcType=VARCHAR},
+      </if>
+      <if test="vrTitle != null" >
+        #{vrTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="vrUrl != null" >
+        #{vrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vrPurl != null" >
+        #{vrPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="vrDescriptions != null" >
+        #{vrDescriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.VedioRecommend" >
+    update j_vediorecommend
+    <set >
+      <if test="vrName != null" >
+        vr_name = #{vrName,jdbcType=VARCHAR},
+      </if>
+      <if test="vrTitle != null" >
+        vr_title = #{vrTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="vrUrl != null" >
+        vr_url = #{vrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vrPurl != null" >
+        vr_purl = #{vrPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="vrDescriptions != null" >
+        vr_descriptions = #{vrDescriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.VedioRecommend" >
+    update j_vediorecommend
+    set vr_name = #{vrName,jdbcType=VARCHAR},
+      vr_title = #{vrTitle,jdbcType=VARCHAR},
+      vr_url = #{vrUrl,jdbcType=VARCHAR},
+      vr_purl = #{vrPurl,jdbcType=VARCHAR},
+      vr_descriptions = #{vrDescriptions,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

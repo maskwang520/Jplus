@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.ToolOfficeRecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.ToolOfficeRecommend" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tor_name" property="torName" jdbcType="VARCHAR" />
+    <result column="tor_title" property="torTitle" jdbcType="VARCHAR" />
+    <result column="tor_url" property="torUrl" jdbcType="VARCHAR" />
+    <result column="tor_purl" property="torPurl" jdbcType="VARCHAR" />
+    <result column="tor_descriptions" property="torDescriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 工具官方推荐信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, tor_name, tor_title, tor_url, tor_purl, tor_descriptions
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_toolofficerecommend
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, tor_name, tor_title, tor_url, tor_purl, tor_descriptions
+    from j_toolofficerecommend
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_toolofficerecommend
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.ToolOfficeRecommend" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_toolofficerecommend (id, tor_name, tor_title, 
+      tor_url, tor_purl, tor_descriptions
+      )
+    values (#{id,jdbcType=INTEGER}, #{torName,jdbcType=VARCHAR}, #{torTitle,jdbcType=VARCHAR}, 
+      #{torUrl,jdbcType=VARCHAR}, #{torPurl,jdbcType=VARCHAR}, #{torDescriptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.ToolOfficeRecommend" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_toolofficerecommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="torName != null" >
+        tor_name,
+      </if>
+      <if test="torTitle != null" >
+        tor_title,
+      </if>
+      <if test="torUrl != null" >
+        tor_url,
+      </if>
+      <if test="torPurl != null" >
+        tor_purl,
+      </if>
+      <if test="torDescriptions != null" >
+        tor_descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="torName != null" >
+        #{torName,jdbcType=VARCHAR},
+      </if>
+      <if test="torTitle != null" >
+        #{torTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="torUrl != null" >
+        #{torUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="torPurl != null" >
+        #{torPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="torDescriptions != null" >
+        #{torDescriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.ToolOfficeRecommend" >
+    update j_toolofficerecommend
+    <set >
+      <if test="torName != null" >
+        tor_name = #{torName,jdbcType=VARCHAR},
+      </if>
+      <if test="torTitle != null" >
+        tor_title = #{torTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="torUrl != null" >
+        tor_url = #{torUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="torPurl != null" >
+        tor_purl = #{torPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="torDescriptions != null" >
+        tor_descriptions = #{torDescriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.ToolOfficeRecommend" >
+    update j_toolofficerecommend
+    set tor_name = #{torName,jdbcType=VARCHAR},
+      tor_title = #{torTitle,jdbcType=VARCHAR},
+      tor_url = #{torUrl,jdbcType=VARCHAR},
+      tor_purl = #{torPurl,jdbcType=VARCHAR},
+      tor_descriptions = #{torDescriptions,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

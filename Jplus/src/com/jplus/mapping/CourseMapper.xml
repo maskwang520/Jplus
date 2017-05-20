@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.CourseMapper">
+	<resultMap type="com.jplus.model.Course" id="BaseResultMap">
+		<id column="id" property="id" />
+		<result column="picture" property="picture" />
+		<result column="title" property="title" />
+		<result column="author" property="author" />
+		<result column="atime" property="atime" />
+		<result column="info" property="info" />
+		<result column="classre" property="classre" />
+		<result column="videoid" property="videoid" />
+		<result column="courseid" property="courseid" />
+		<result column="clicknum" property="clicknum" />
+		<result column="keyword" property="keyword" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,picture,title,author,atime,info,classre,videoid,courseid,clicknum,keyword
+	</sql>
+	<!--@Controller<InitCourse> 查询所有课程 带分页 -->
+	<select id="selectCourseByPage" parameterType="com.jplus.util.Page"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM j_course LIMIT #{startPos},
+		#{pageSize};
+	</select>
+	<!--查询记录数 -->
+	<select id="getAllCourseCount" resultType="long">
+		SELECT COUNT(*) FROM
+		j_course;
+	</select>
+	
+	<select id="getCountByCourseId" resultType="long" parameterType="java.lang.String">
+		SELECT COUNT(*) FROM j_course WHERE videoid =#{videoid};
+	</select>
+	
+	<select id="selectCourseByCourseid" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM j_course
+		WHERE 
+        videoid =#{videoid}
+		LIMIT #{startPos},#{pageSize};
+	</select>
+		<select id="selectCourseByKey" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM j_course
+		WHERE 
+        keyword
+        LIKE CONCAT('%','${keyword}','%' ) 
+		LIMIT #{startPos},#{pageSize};
+	</select>
+	
+	<!--根据courseid查询课程信息 -->
+	 <select id="getCourseByCid" parameterType="java.lang.String" resultMap="BaseResultMap" >
+   	 select <include refid="Base_Column_List" /> from j_course where courseid=#{courseid}
+	  </select>
+  	<!-- 更新点击量 -->
+  <update id ="updateClick" parameterType="java.lang.String">
+  	UPDATE j_course SET clicknum =clicknum+1 WHERE courseid =#{courseid};
+  </update>
+  <update id="updateByCourseid" parameterType="com.jplus.model.Course" >
+    update j_course
+    set id =#{id},
+    	picture = #{picture},
+        title = #{title},
+        author = #{author},
+        atime = #{atime},
+        info = #{info},
+        classre = #{classre},
+        videoid = #{videoid},
+        clicknum = #{clicknum},
+        keyword = #{keyword},
+	    where courseid= #{courseid};
+  </update>
+  
+ 
+  <insert id="insertSelective" parameterType="com.jplus.model.Course" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_course (picture,title,author,atime,info,classre,courseid,videoid,clicknum,keyword)
+    values (#{picture}, #{title}, 
+      #{author}, #{atime}, #{info},
+      #{classre},#{courseid},#{videoid}, #{clicknum},      
+      #{keyword})
+  </insert>
+</mapper>

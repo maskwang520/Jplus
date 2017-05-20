@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.RecruitMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.Recruit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="re_title" property="reTitle" jdbcType="VARCHAR" />
+    <result column="re_description" property="reDescription" jdbcType="VARCHAR" />
+    <result column="re_provide" property="reProvide" jdbcType="VARCHAR" />
+    <result column="re_date" property="reDate" jdbcType="TIMESTAMP" />
+    <result column="re_enddate" property="reEnddate" jdbcType="TIMESTAMP" />
+    <result column="re_author_id" property="reAuthorId" jdbcType="INTEGER" />
+    <result column="re_told" property="reTold" jdbcType="VARCHAR" />
+    <result column="re_prize" property="rePrize" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jplus.model.Recruit" extends="BaseResultMap" >
+    <result column="re_content" property="reContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 招聘信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, re_title, re_description, re_provide, re_date, re_enddate, re_author_id, re_told, 
+    re_prize
+  </sql>
+  
+  
+  <sql id="Blob_Column_List" >
+    re_content
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from j_recruit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select id, re_title, re_description, re_provide, re_date, re_enddate, re_author_id, 
+    re_told, re_prize, re_content
+    from j_recruit
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_recruit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Recruit" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_recruit (id, re_title, re_description, 
+      re_provide, re_date, re_enddate, 
+      re_author_id, re_told, re_prize, 
+      re_content)
+    values (#{id,jdbcType=INTEGER}, #{reTitle,jdbcType=VARCHAR}, #{reDescription,jdbcType=VARCHAR}, 
+      #{reProvide,jdbcType=VARCHAR}, #{reDate,jdbcType=TIMESTAMP}, #{reEnddate,jdbcType=TIMESTAMP}, 
+      #{reAuthorId,jdbcType=INTEGER}, #{reTold,jdbcType=VARCHAR}, #{rePrize,jdbcType=INTEGER}, 
+      #{reContent,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Recruit" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_recruit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="reTitle != null" >
+        re_title,
+      </if>
+      <if test="reDescription != null" >
+        re_description,
+      </if>
+      <if test="reProvide != null" >
+        re_provide,
+      </if>
+      <if test="reDate != null" >
+        re_date,
+      </if>
+      <if test="reEnddate != null" >
+        re_enddate,
+      </if>
+      <if test="reAuthorId != null" >
+        re_author_id,
+      </if>
+      <if test="reTold != null" >
+        re_told,
+      </if>
+      <if test="rePrize != null" >
+        re_prize,
+      </if>
+      <if test="reContent != null" >
+        re_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="reTitle != null" >
+        #{reTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="reDescription != null" >
+        #{reDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="reProvide != null" >
+        #{reProvide,jdbcType=VARCHAR},
+      </if>
+      <if test="reDate != null" >
+        #{reDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reEnddate != null" >
+        #{reEnddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reAuthorId != null" >
+        #{reAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="reTold != null" >
+        #{reTold,jdbcType=VARCHAR},
+      </if>
+      <if test="rePrize != null" >
+        #{rePrize,jdbcType=INTEGER},
+      </if>
+      <if test="reContent != null" >
+        #{reContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Recruit" >
+    update j_recruit
+    <set >
+      <if test="reTitle != null" >
+        re_title = #{reTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="reDescription != null" >
+        re_description = #{reDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="reProvide != null" >
+        re_provide = #{reProvide,jdbcType=VARCHAR},
+      </if>
+      <if test="reDate != null" >
+        re_date = #{reDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reEnddate != null" >
+        re_enddate = #{reEnddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reAuthorId != null" >
+        re_author_id = #{reAuthorId,jdbcType=INTEGER},
+      </if>
+      <if test="reTold != null" >
+        re_told = #{reTold,jdbcType=VARCHAR},
+      </if>
+      <if test="rePrize != null" >
+        re_prize = #{rePrize,jdbcType=INTEGER},
+      </if>
+      <if test="reContent != null" >
+        re_content = #{reContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jplus.model.Recruit" >
+    update j_recruit
+    set re_title = #{reTitle,jdbcType=VARCHAR},
+      re_description = #{reDescription,jdbcType=VARCHAR},
+      re_provide = #{reProvide,jdbcType=VARCHAR},
+      re_date = #{reDate,jdbcType=TIMESTAMP},
+      re_enddate = #{reEnddate,jdbcType=TIMESTAMP},
+      re_author_id = #{reAuthorId,jdbcType=INTEGER},
+      re_told = #{reTold,jdbcType=VARCHAR},
+      re_prize = #{rePrize,jdbcType=INTEGER},
+      re_content = #{reContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Recruit" >
+    update j_recruit
+    set re_title = #{reTitle,jdbcType=VARCHAR},
+      re_description = #{reDescription,jdbcType=VARCHAR},
+      re_provide = #{reProvide,jdbcType=VARCHAR},
+      re_date = #{reDate,jdbcType=TIMESTAMP},
+      re_enddate = #{reEnddate,jdbcType=TIMESTAMP},
+      re_author_id = #{reAuthorId,jdbcType=INTEGER},
+      re_told = #{reTold,jdbcType=VARCHAR},
+      re_prize = #{rePrize,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

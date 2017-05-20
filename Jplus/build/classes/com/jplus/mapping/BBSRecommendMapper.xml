@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.BBSRecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.BBSRecommend" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="br_name" property="brName" jdbcType="VARCHAR" />
+    <result column="br_title" property="brTitle" jdbcType="VARCHAR" />
+    <result column="br_url" property="brUrl" jdbcType="VARCHAR" />
+    <result column="br_purl" property="brPurl" jdbcType="VARCHAR" />
+    <result column="br_descriptions" property="brDescriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <!-- 
+  		@author Chitry 
+  		@title 论坛推荐信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, br_name, br_title, br_url, br_purl, br_descriptions
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_bbsrecommend
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, br_name, br_title, br_url, br_purl, br_descriptions
+    from j_bbsrecommend
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_bbsrecommend
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.jplus.model.BBSRecommend" >
+   
+    insert into j_bbsrecommend (id, br_name, br_title, 
+      br_url, br_purl, br_descriptions
+      )
+    values (#{id,jdbcType=INTEGER}, #{brName,jdbcType=VARCHAR}, #{brTitle,jdbcType=VARCHAR}, 
+      #{brUrl,jdbcType=VARCHAR}, #{brPurl,jdbcType=VARCHAR}, #{brDescriptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.BBSRecommend" >
+    insert into j_bbsrecommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="brName != null" >
+        br_name,
+      </if>
+      <if test="brTitle != null" >
+        br_title,
+      </if>
+      <if test="brUrl != null" >
+        br_url,
+      </if>
+      <if test="brPurl != null" >
+        br_purl,
+      </if>
+      <if test="brDescriptions != null" >
+        br_descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="brName != null" >
+        #{brName,jdbcType=VARCHAR},
+      </if>
+      <if test="brTitle != null" >
+        #{brTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="brUrl != null" >
+        #{brUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brPurl != null" >
+        #{brPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="brDescriptions != null" >
+        #{brDescriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.BBSRecommend" >
+    update j_bbsrecommend
+    <set >
+      <if test="brName != null" >
+        br_name = #{brName,jdbcType=VARCHAR},
+      </if>
+      <if test="brTitle != null" >
+        br_title = #{brTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="brUrl != null" >
+        br_url = #{brUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brPurl != null" >
+        br_purl = #{brPurl,jdbcType=VARCHAR},
+      </if>
+      <if test="brDescriptions != null" >
+        br_descriptions = #{brDescriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.BBSRecommend" >
+    update j_bbsrecommend
+    set br_name = #{brName,jdbcType=VARCHAR},
+      br_title = #{brTitle,jdbcType=VARCHAR},
+      br_url = #{brUrl,jdbcType=VARCHAR},
+      br_purl = #{brPurl,jdbcType=VARCHAR},
+      br_descriptions = #{brDescriptions,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

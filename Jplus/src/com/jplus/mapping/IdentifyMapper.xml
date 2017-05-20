@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.IdentifyMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.Identify" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="iname" property="iname" jdbcType="VARCHAR" />
+    <result column="certnum" property="certnum" jdbcType="VARCHAR" />
+    <result column="sessions" property="sessions" jdbcType="INTEGER" />
+    <result column="positions" property="positions" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 认证表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, iname, certnum, sessions, positions, descriptions
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_identify
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_identify
+    where iname = #{uname,jdbcType=VARCHAR}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, iname, certnum, sessions, positions, descriptions
+    from j_identify
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_identify
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Identify" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_identify (id, iname, certnum, 
+      sessions, positions, descriptions
+      )
+    values (#{id,jdbcType=INTEGER}, #{iname,jdbcType=VARCHAR}, #{certnum,jdbcType=VARCHAR}, 
+      #{sessions,jdbcType=INTEGER}, #{positions,jdbcType=VARCHAR}, #{descriptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Identify" >
+   
+    insert into j_identify
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="iname != null" >
+        iname,
+      </if>
+      <if test="certnum != null" >
+        certnum,
+      </if>
+      <if test="sessions != null" >
+        sessions,
+      </if>
+      <if test="positions != null" >
+        positions,
+      </if>
+      <if test="descriptions != null" >
+        descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="iname != null" >
+        #{iname,jdbcType=VARCHAR},
+      </if>
+      <if test="certnum != null" >
+        #{certnum,jdbcType=VARCHAR},
+      </if>
+      <if test="sessions != null" >
+        #{sessions,jdbcType=INTEGER},
+      </if>
+      <if test="positions != null" >
+        #{positions,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptions != null" >
+        #{descriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Identify" >
+    update j_identify
+    <set >
+      <if test="iname != null" >
+        iname = #{iname,jdbcType=VARCHAR},
+      </if>
+      <if test="certnum != null" >
+        certnum = #{certnum,jdbcType=VARCHAR},
+      </if>
+      <if test="sessions != null" >
+        sessions = #{sessions,jdbcType=INTEGER},
+      </if>
+      <if test="positions != null" >
+        positions = #{positions,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptions != null" >
+        descriptions = #{descriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Identify" >
+    update j_identify
+    set iname = #{iname,jdbcType=VARCHAR},
+      certnum = #{certnum,jdbcType=VARCHAR},
+      sessions = #{sessions,jdbcType=INTEGER},
+      positions = #{positions,jdbcType=VARCHAR},
+      descriptions = #{descriptions,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+      <select id="getIdentifyMember"  resultMap="resultIdentifyMemberList">
+      select j_identify.id, j_identify.iname, j_identify.certnum, j_identify.sessions, j_identify.positions, j_identify.descriptions, 
+    j_member.skills, j_member.educations, j_member.workbk, j_member.suggestions,j_member.qq, j_member.telephone, j_member.email, j_member.weixinnum, j_member.blogs, 
+    j_member.viewtype, j_member.pwurl, j_member.indentifytime, j_member.user_id, j_member.identify_id from j_identify,j_member 
+              where j_identify.id=j_member.identify_id 
+    </select>
+     
+    <resultMap  id="resultIdentifyMemberList" type="com.jplus.model.Member">
+       <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purl" property="purl" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+    <result column="cotents" property="cotents" jdbcType="VARCHAR" />
+    <result column="nowaddress" property="nowaddress" jdbcType="VARCHAR" />
+    <result column="nowwork" property="nowwork" jdbcType="VARCHAR" />
+    <result column="myplan" property="myplan" jdbcType="VARCHAR" />
+    <result column="knowsphere" property="knowsphere" jdbcType="VARCHAR" />
+    <result column="skills" property="skills" jdbcType="VARCHAR" />
+    <result column="educations" property="educations" jdbcType="VARCHAR" />
+    <result column="workbk" property="workbk" jdbcType="VARCHAR" />
+    <result column="suggestions" property="suggestions" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="weixinnum" property="weixinnum" jdbcType="VARCHAR" />
+    <result column="blogs" property="blogs" jdbcType="VARCHAR" />
+    <result column="viewtype" property="viewtype" jdbcType="INTEGER" />
+    <result column="pwurl" property="pwurl" jdbcType="VARCHAR" />
+    <result column="indentifytime" property="indentifytime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="identify_id" property="identifyId" jdbcType="INTEGER" />
+         <association property="identify" javaType="com.jplus.model.Identify">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="iname" property="iname" jdbcType="VARCHAR" />
+    <result column="certnum" property="certnum" jdbcType="VARCHAR" />
+    <result column="sessions" property="sessions" jdbcType="INTEGER" />
+    <result column="positions" property="positions" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />    
+        </association>       
+    </resultMap>
+</mapper>

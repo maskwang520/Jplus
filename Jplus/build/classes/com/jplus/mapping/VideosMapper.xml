@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.VideosMapper">
+
+	<resultMap type="com.jplus.model.Videos" id="BaseResultMap">
+		<id column="id" property="id" />
+		<result column="courseid" property="courseid" />
+		<result column="sectionname" property="sectionname" />
+		<result column="videosid" property="videosid" />
+		<result column="title" property="title" />
+		<result column="description" property="description" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,courseid,title,videosid,description
+	</sql>
+	<!--查询 根据主键 id -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from j_videos
+		where id = #{id}
+	</select>
+	<!-- videos集合 -->
+	<select id="selectAllVideos" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from j_videos where courseid=#{courseid}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from j_videos
+		where id = #{id}
+	</delete>
+	<delete id="deleteByVideosid" parameterType="java.lang.String">
+		delete from j_videos
+		where videosid = #{videosid}
+	</delete>
+
+
+	<insert id="insert" parameterType="com.jplus.model.Videos">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="BEFORE">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into j_videos
+		(courseid,videosid,title,description)
+		values ( #{courseid},#{videosid},#{title},
+		#{description})
+	</insert>
+
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Videos">
+		update j_videos
+		<set>
+			<if test="videosid != null">
+				videosid = #{videosid},
+			</if>
+			<if test="courseid != null">
+				courseid = #{courseid},
+			</if>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+	<update id="updateByPrimaryKey" parameterType="com.jplus.model.Videos">
+		update j_videos
+		set videosid = #{videosid},
+		courseid = #{courseid},
+		title = #{title},
+		description = #{description},
+		where id = #{id}
+	</update>
+</mapper>

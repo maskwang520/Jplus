@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.MemberMapper" >
+   <resultMap id="BaseResultMap" type="com.jplus.model.Member" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purl" property="purl" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+    <result column="cotents" property="cotents" jdbcType="VARCHAR" />
+    <result column="nowaddress" property="nowaddress" jdbcType="VARCHAR" />
+    <result column="nowwork" property="nowwork" jdbcType="VARCHAR" />
+    <result column="myplan" property="myplan" jdbcType="VARCHAR" />
+    <result column="knowsphere" property="knowsphere" jdbcType="VARCHAR" />
+    <result column="skills" property="skills" jdbcType="VARCHAR" />
+    <result column="educations" property="educations" jdbcType="VARCHAR" />
+    <result column="workbk" property="workbk" jdbcType="VARCHAR" />
+    <result column="suggestions" property="suggestions" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="weixinnum" property="weixinnum" jdbcType="VARCHAR" />
+    <result column="blogs" property="blogs" jdbcType="VARCHAR" />
+    <result column="viewtype" property="viewtype" jdbcType="INTEGER" />
+    <result column="pwurl" property="pwurl" jdbcType="VARCHAR" />
+    <result column="indentifytime" property="indentifytime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="identify_id" property="identifyId" jdbcType="INTEGER" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 实验室成员信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, purl, descriptions, cotents, nowaddress, nowwork, myplan, knowsphere, skills, 
+    educations, workbk, suggestions, qq, telephone, email, weixinnum, blogs, viewtype, 
+    pwurl, indentifytime, user_id, identify_id
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_member
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimary" resultMap="resultIdentifyUserMemberList"  >
+     select j_identify.id, j_identify.iname, j_identify.certnum, j_identify.sessions, j_identify.positions,j_member.descriptions, j_identify.descriptions, j_user.id, j_user.username, j_user.password, j_user.realname, j_user.certsnum, j_user.age, j_user.sex, j_user.regtime, j_user.qq, j_user.telephone, 
+    j_user.birthday, j_user.hobby, j_user.address, j_user.email, j_user.limits, j_user.identifys, j_user.userlevel_id, j_user.scores,
+    j_member.id, j_member.purl,  j_member.cotents, j_member.nowaddress, j_member.nowwork, j_member.myplan, j_member.knowsphere,j_member.skills, j_member.educations, j_member.workbk, j_member.suggestions,j_member.qq, j_member.telephone, j_member.email, j_member.weixinnum, j_member.blogs, 
+    j_member.viewtype, j_member.pwurl, j_member.indentifytime, j_member.user_id, j_member.identify_id,j_member.mp3 from j_identify,j_user,j_member 
+              where j_identify.id=j_member.identify_id and j_user.id=j_member.user_id and j_member.identify_id=#{id}
+  </select>
+  
+   <select id="findMemberByuserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from j_member
+    where user_id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, purl, descriptions, cotents, nowaddress, nowwork, myplan, knowsphere, 
+    skills, educations, workbk, suggestions, qq, telephone, email, weixinnum, blogs, 
+    viewtype, pwurl, indentifytime, user_id, identify_id,mp3
+    from j_member
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_member
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Member" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_member (id, purl, descriptions, 
+      cotents, nowaddress, nowwork, 
+      myplan, knowsphere, skills, 
+      educations, workbk, suggestions, 
+      qq, telephone, email, 
+      weixinnum, blogs, viewtype, 
+      pwurl, indentifytime, user_id,identify_id,mp3)
+    values (#{id,jdbcType=INTEGER}, #{purl,jdbcType=VARCHAR}, #{descriptions,jdbcType=VARCHAR}, 
+      #{cotents,jdbcType=VARCHAR}, #{nowaddress,jdbcType=VARCHAR}, #{nowwork,jdbcType=VARCHAR}, 
+      #{myplan,jdbcType=VARCHAR}, #{knowsphere,jdbcType=VARCHAR}, #{skills,jdbcType=VARCHAR}, 
+      #{educations,jdbcType=VARCHAR}, #{workbk,jdbcType=VARCHAR}, #{suggestions,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{weixinnum,jdbcType=VARCHAR}, #{blogs,jdbcType=VARCHAR}, #{viewtype,jdbcType=INTEGER}, 
+      #{pwurl,jdbcType=VARCHAR}, #{indentifytime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
+      #{identifyId,jdbcType=INTEGER},#{mp3,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Member" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="purl != null" >
+        purl,
+      </if>
+      <if test="descriptions != null" >
+        descriptions,
+      </if>
+      <if test="cotents != null" >
+        cotents,
+      </if>
+      <if test="nowaddress != null" >
+        nowaddress,
+      </if>
+      <if test="nowwork != null" >
+        nowwork,
+      </if>
+      <if test="myplan != null" >
+        myplan,
+      </if>
+      <if test="knowsphere != null" >
+        knowsphere,
+      </if>
+      <if test="skills != null" >
+        skills,
+      </if>
+      <if test="educations != null" >
+        educations,
+      </if>
+      <if test="workbk != null" >
+        workbk,
+      </if>
+      <if test="suggestions != null" >
+        suggestions,
+      </if>
+      <if test="qq != null" >
+        qq,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="weixinnum != null" >
+        weixinnum,
+      </if>
+      <if test="blogs != null" >
+        blogs,
+      </if>
+      <if test="viewtype != null" >
+        viewtype,
+      </if>
+      <if test="pwurl != null" >
+        pwurl,
+      </if>
+      <if test="indentifytime != null" >
+        indentifytime,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="identifyId != null" >
+        identify_id,
+      </if>
+      
+      <if test="mp3 != null" >
+        mp3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="purl != null" >
+        #{purl,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptions != null" >
+        #{descriptions,jdbcType=VARCHAR},
+      </if>
+      <if test="cotents != null" >
+        #{cotents,jdbcType=VARCHAR},
+      </if>
+      <if test="nowaddress != null" >
+        #{nowaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nowwork != null" >
+        #{nowwork,jdbcType=VARCHAR},
+      </if>
+      <if test="myplan != null" >
+        #{myplan,jdbcType=VARCHAR},
+      </if>
+      <if test="knowsphere != null" >
+        #{knowsphere,jdbcType=VARCHAR},
+      </if>
+      <if test="skills != null" >
+        #{skills,jdbcType=VARCHAR},
+      </if>
+      <if test="educations != null" >
+        #{educations,jdbcType=VARCHAR},
+      </if>
+      <if test="workbk != null" >
+        #{workbk,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestions != null" >
+        #{suggestions,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinnum != null" >
+        #{weixinnum,jdbcType=VARCHAR},
+      </if>
+      <if test="blogs != null" >
+        #{blogs,jdbcType=VARCHAR},
+      </if>
+      <if test="viewtype != null" >
+        #{viewtype,jdbcType=INTEGER},
+      </if>
+      <if test="pwurl != null" >
+        #{pwurl,jdbcType=VARCHAR},
+      </if>
+      <if test="indentifytime != null" >
+        #{indentifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="identifyId != null" >
+        #{identifyId,jdbcType=INTEGER},
+      </if>
+      
+      <if test="mp3 != null" >
+        #{mp3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Member" >
+    update j_member
+    <set >
+      <if test="purl != null" >
+        purl = #{purl,jdbcType=VARCHAR},
+      </if>
+      <if test="descriptions != null" >
+        descriptions = #{descriptions,jdbcType=VARCHAR},
+      </if>
+      <if test="cotents != null" >
+        cotents = #{cotents,jdbcType=VARCHAR},
+      </if>
+      <if test="nowaddress != null" >
+        nowaddress = #{nowaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="nowwork != null" >
+        nowwork = #{nowwork,jdbcType=VARCHAR},
+      </if>
+      <if test="myplan != null" >
+        myplan = #{myplan,jdbcType=VARCHAR},
+      </if>
+      <if test="knowsphere != null" >
+        knowsphere = #{knowsphere,jdbcType=VARCHAR},
+      </if>
+      <if test="skills != null" >
+        skills = #{skills,jdbcType=VARCHAR},
+      </if>
+      <if test="educations != null" >
+        educations = #{educations,jdbcType=VARCHAR},
+      </if>
+      <if test="workbk != null" >
+        workbk = #{workbk,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestions != null" >
+        suggestions = #{suggestions,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinnum != null" >
+        weixinnum = #{weixinnum,jdbcType=VARCHAR},
+      </if>
+      <if test="blogs != null" >
+        blogs = #{blogs,jdbcType=VARCHAR},
+      </if>
+      <if test="viewtype != null" >
+        viewtype = #{viewtype,jdbcType=INTEGER},
+      </if>
+      <if test="pwurl != null" >
+        pwurl = #{pwurl,jdbcType=VARCHAR},
+      </if>
+      <if test="indentifytime != null" >
+        indentifytime = #{indentifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="identifyId != null" >
+        identify_id = #{identifyId,jdbcType=INTEGER},
+      </if>
+      
+      <if test="mp3 != null" >
+        mp3 = #{mp3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Member" >
+    update j_member
+    set purl = #{purl,jdbcType=VARCHAR},
+      descriptions = #{descriptions,jdbcType=VARCHAR},
+      cotents = #{cotents,jdbcType=VARCHAR},
+      nowaddress = #{nowaddress,jdbcType=VARCHAR},
+      nowwork = #{nowwork,jdbcType=VARCHAR},
+      myplan = #{myplan,jdbcType=VARCHAR},
+      knowsphere = #{knowsphere,jdbcType=VARCHAR},
+      skills = #{skills,jdbcType=VARCHAR},
+      educations = #{educations,jdbcType=VARCHAR},
+      workbk = #{workbk,jdbcType=VARCHAR},
+      suggestions = #{suggestions,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      weixinnum = #{weixinnum,jdbcType=VARCHAR},
+      blogs = #{blogs,jdbcType=VARCHAR},
+      viewtype = #{viewtype,jdbcType=INTEGER},
+      pwurl = #{pwurl,jdbcType=VARCHAR},
+      indentifytime = #{indentifytime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      identify_id = #{identifyId,jdbcType=INTEGER},
+     
+      mp3 = #{mp3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="getIdentifyUserMember"  resultMap="resultIdentifyUserMemberList">
+       select j_identify.id, j_identify.iname, j_identify.certnum, j_identify.sessions, j_identify.positions,j_member.descriptions, j_identify.descriptions description, j_user.id, j_user.username, j_user.password, j_user.realname, j_user.certsnum, j_user.age, j_user.sex, j_user.regtime, j_user.qq, j_user.telephone, 
+    j_user.birthday, j_user.hobby, j_user.address, j_user.email, j_user.limits, j_user.identifys, j_user.userlevel_id, j_user.scores,
+    j_member.id, j_member.purl,  j_member.cotents, j_member.nowaddress, j_member.nowwork, j_member.myplan, j_member.knowsphere,j_member.skills, j_member.educations, j_member.workbk, j_member.suggestions,j_member.qq, j_member.telephone, j_member.email, j_member.weixinnum, j_member.blogs, 
+    j_member.viewtype, j_member.pwurl, j_member.indentifytime, j_member.user_id, j_member.identify_id,j_member.mp3 from j_identify,j_user,j_member 
+              where j_identify.id=j_member.identify_id and j_user.id=j_member.user_id and j_identify.sessions=#{sessionid}
+    </select>
+     
+    <resultMap  id="resultIdentifyUserMemberList" type="com.jplus.model.Member">
+       <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="purl" property="purl" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />
+    <result column="cotents" property="cotents" jdbcType="VARCHAR" />
+    <result column="nowaddress" property="nowaddress" jdbcType="VARCHAR" />
+    <result column="nowwork" property="nowwork" jdbcType="VARCHAR" />
+    <result column="myplan" property="myplan" jdbcType="VARCHAR" />
+    <result column="knowsphere" property="knowsphere" jdbcType="VARCHAR" />
+    <result column="skills" property="skills" jdbcType="VARCHAR" />
+    <result column="educations" property="educations" jdbcType="VARCHAR" />
+    <result column="workbk" property="workbk" jdbcType="VARCHAR" />
+    <result column="suggestions" property="suggestions" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="weixinnum" property="weixinnum" jdbcType="VARCHAR" />
+    <result column="blogs" property="blogs" jdbcType="VARCHAR" />
+    <result column="viewtype" property="viewtype" jdbcType="INTEGER" />
+    <result column="pwurl" property="pwurl" jdbcType="VARCHAR" />
+    <result column="indentifytime" property="indentifytime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="identify_id" property="identifyId" jdbcType="INTEGER" />
+   
+    <result column="mp3" property="mp3" jdbcType="VARCHAR" />
+         <association property="user" javaType="com.jplus.model.User">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="certsnum" property="certsnum" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="regtime" property="regtime" jdbcType="TIMESTAMP" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="hobby" property="hobby" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="limits" property="limits" jdbcType="INTEGER" />
+    <result column="identifys" property="identifys" jdbcType="INTEGER" />
+    <result column="userlevel_id" property="userlevelId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="INTEGER" />        
+        </association>  
+     <association property="identify" javaType="com.jplus.model.Identify">
+            <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="iname" property="iname" jdbcType="VARCHAR" />
+    <result column="certnum" property="certnum" jdbcType="VARCHAR" />
+    <result column="sessions" property="sessions" jdbcType="INTEGER" />
+    <result column="positions" property="positions" jdbcType="VARCHAR" />
+    <result column="descriptions" property="descriptions" jdbcType="VARCHAR" />    
+        </association>        
+    </resultMap>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.SectionMapper">
+
+	<resultMap type="com.jplus.model.Section" id="BaseResultMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="courseid" property="courseid" />
+		<result column="keyword" property="keyword" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,name,courseid,keyword
+	</sql>
+	<!--查询 根据主键 id -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from j_section
+		where id = #{id}
+	</select>
+	<select id="selectByCourseid" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from j_section
+		where courseid = #{courseid}
+	</select>
+	<!-- section集合 -->
+	<select id="selectAllSection" resultMap="BaseResultMap">
+		select id,name,courseid,keyword from j_section
+	</select>
+
+	<!-- 关键字集合 -->
+	<select id="selectKeyWordInSec" resultMap="BaseResultMap">
+		select keyword from j_section
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from j_section
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+
+	<insert id="insert" parameterType="com.jplus.model.Section">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="BEFORE">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into j_section (id, name, courseid, keyword )
+		values (#{id}, #{name}, #{courseid},
+		#{keyword}
+	</insert>
+
+
+	<insert id="insertSelective" parameterType="com.jplus.model.Section">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="BEFORE">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into j_section
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			<if test="name != null">
+				name,
+			</if>
+			<if test="courseid != null">
+				courseid,
+			</if>
+			<if test="keyword != null">
+				keyword,
+			</if>
+		</trim>
+
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id},
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="courseid != null">
+				#{courseid},
+			</if>
+			<if test="keyword != null">
+				#{keyword},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Section">
+		update j_section
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="courseid != null">
+				courseid = #{courseid},
+			</if>
+			<if test="keyword != null">
+				keyword = #{keyword},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+	<update id="updateByPrimaryKey" parameterType="com.jplus.model.Section">
+		update j_section
+		set name = #{name},
+		courseid = #{courseid},
+		keyword = #{keyword},
+		where id = #{id}
+	</update>
+</mapper>

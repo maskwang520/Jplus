@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.ResMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.Res" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="resname" property="resname" jdbcType="VARCHAR" />
+    <result column="resdescription" property="resdescription" jdbcType="VARCHAR" />
+    <result column="res_bdypath" property="resBdypath" jdbcType="VARCHAR" />
+    <result column="res_bdypassword" property="resBdypassword" jdbcType="VARCHAR" />
+    <result column="res_360path" property="res360path" jdbcType="VARCHAR" />
+    <result column="res_360password" property="res360password" jdbcType="VARCHAR" />
+    <result column="res_locationpath" property="resLocationpath" jdbcType="VARCHAR" />
+    <result column="downloadnum" property="downloadnum" jdbcType="INTEGER" />
+    <result column="downloadscore" property="downloadscore" jdbcType="INTEGER" />
+    <result column="resdate" property="resdate" jdbcType="TIMESTAMP" />
+    <result column="resstate" property="resstate" jdbcType="INTEGER" />
+    <result column="resdiscuss" property="resdiscuss" jdbcType="INTEGER" />
+    <result column="resclass_id" property="resclassId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+     <result column="userzz" property="userzz" jdbcType="VARCHAR" />
+      <result column="resclassds" property="resclassds" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 资源信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, resname, resdescription, res_bdypath, res_bdypassword, res_360path, res_360password, 
+    res_locationpath, downloadnum, downloadscore, resdate, resstate, resdiscuss, resclass_id, 
+    user_id, userzz, resclassds
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_res
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, resname, resdescription, res_bdypath, res_bdypassword, res_360path, res_360password, 
+    res_locationpath, downloadnum, downloadscore, resdate, resstate, resdiscuss, resclass_id, 
+    user_id, userzz, resclassds
+    from j_res where resstate=2 order by resdate desc
+  </select>
+  
+  <select id="selectAllByrid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select  <include refid="Base_Column_List" /> from j_res where
+  		resclass_id=#{id,jdbcType=INTEGER}
+    AND resstate=2
+  </select> 
+  
+  <select id="findResBysouinfo" parameterType="com.jplus.model.Res" resultMap="BaseResultMap" >
+    select * from j_res where true
+    <if test="resname!=null"> AND resname LIKE #{resname,jdbcType=VARCHAR}</if>
+    AND resstate=2 order by downloadnum desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_res
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.Res" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_res (id, resname, resdescription, 
+      res_bdypath, res_bdypassword, res_360path, 
+      res_360password, res_locationpath, downloadnum, 
+      downloadscore, resdate, resstate, 
+      resdiscuss, resclass_id, user_id, userzz, resclassds
+      )
+    values (#{id,jdbcType=INTEGER}, #{resname,jdbcType=VARCHAR}, #{resdescription,jdbcType=VARCHAR}, 
+      #{resBdypath,jdbcType=VARCHAR}, #{resBdypassword,jdbcType=VARCHAR}, #{res360path,jdbcType=VARCHAR}, 
+      #{res360password,jdbcType=VARCHAR}, #{resLocationpath,jdbcType=VARCHAR}, #{downloadnum,jdbcType=INTEGER}, 
+      #{downloadscore,jdbcType=INTEGER}, #{resdate,jdbcType=TIMESTAMP}, #{resstate,jdbcType=INTEGER}, 
+      #{resdiscuss,jdbcType=INTEGER}, #{resclassId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userzz,jdbcType=VARCHAR}
+      , #{resclassds,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.Res" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_res
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    
+      <if test="resname != null" >
+        resname,
+      </if>
+      <if test="resdescription != null" >
+        resdescription,
+      </if>
+      <if test="resBdypath != null" >
+        res_bdypath,
+      </if>
+      <if test="resBdypassword != null" >
+        res_bdypassword,
+      </if>
+      <if test="res360path != null" >
+        res_360path,
+      </if>
+      <if test="res360password != null" >
+        res_360password,
+      </if>
+      <if test="resLocationpath != null" >
+        res_locationpath,
+      </if>
+      <if test="downloadnum != null" >
+        downloadnum,
+      </if>
+      <if test="downloadscore != null" >
+        downloadscore,
+      </if>
+      <if test="resdate != null" >
+        resdate,
+      </if>
+      <if test="resstate != null" >
+        resstate,
+      </if>
+      <if test="resdiscuss != null" >
+        resdiscuss,
+      </if>
+      <if test="resclassId != null" >
+        resclass_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userzz != null" >
+        userzz,
+      </if>
+      <if test="resclassds != null" >
+        resclassds,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      
+      <if test="resname != null" >
+        #{resname,jdbcType=VARCHAR},
+      </if>
+      <if test="resdescription != null" >
+        #{resdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="resBdypath != null" >
+        #{resBdypath,jdbcType=VARCHAR},
+      </if>
+      <if test="resBdypassword != null" >
+        #{resBdypassword,jdbcType=VARCHAR},
+      </if>
+      <if test="res360path != null" >
+        #{res360path,jdbcType=VARCHAR},
+      </if>
+      <if test="res360password != null" >
+        #{res360password,jdbcType=VARCHAR},
+      </if>
+      <if test="resLocationpath != null" >
+        #{resLocationpath,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadnum != null" >
+        #{downloadnum,jdbcType=INTEGER},
+      </if>
+      <if test="downloadscore != null" >
+        #{downloadscore,jdbcType=INTEGER},
+      </if>
+      <if test="resdate != null" >
+        #{resdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resstate != null" >
+        #{resstate,jdbcType=INTEGER},
+      </if>
+      <if test="resdiscuss != null" >
+        #{resdiscuss,jdbcType=INTEGER},
+      </if>
+      <if test="resclassId != null" >
+        #{resclassId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+       <if test="userzz != null" >
+        #{userzz,jdbcType=VARCHAR},
+      </if>
+      <if test="resclassds != null" >
+        #{resclassds,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.Res" >
+    update j_res
+    <set >
+      <if test="resname != null" >
+        resname = #{resname,jdbcType=VARCHAR},
+      </if>
+      <if test="resdescription != null" >
+        resdescription = #{resdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="resBdypath != null" >
+        res_bdypath = #{resBdypath,jdbcType=VARCHAR},
+      </if>
+      <if test="resBdypassword != null" >
+        res_bdypassword = #{resBdypassword,jdbcType=VARCHAR},
+      </if>
+      <if test="res360path != null" >
+        res_360path = #{res360path,jdbcType=VARCHAR},
+      </if>
+      <if test="res360password != null" >
+        res_360password = #{res360password,jdbcType=VARCHAR},
+      </if>
+      <if test="resLocationpath != null" >
+        res_locationpath = #{resLocationpath,jdbcType=VARCHAR},
+      </if>
+      <if test="downloadnum != null" >
+        downloadnum = #{downloadnum,jdbcType=INTEGER},
+      </if>
+      <if test="downloadscore != null" >
+        downloadscore = #{downloadscore,jdbcType=INTEGER},
+      </if>
+      <if test="resdate != null" >
+        resdate = #{resdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resstate != null" >
+        resstate = #{resstate,jdbcType=INTEGER},
+      </if>
+      <if test="resdiscuss != null" >
+        resdiscuss = #{resdiscuss,jdbcType=INTEGER},
+      </if>
+      <if test="resclassId != null" >
+        resclass_id = #{resclassId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userzz != null" >
+        #{userzz,jdbcType=VARCHAR},
+      </if>
+      <if test="resclassds != null" >
+        #{resclassds,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.Res" >
+    update j_res
+    set resname = #{resname,jdbcType=VARCHAR},
+      resdescription = #{resdescription,jdbcType=VARCHAR},
+      res_bdypath = #{resBdypath,jdbcType=VARCHAR},
+      res_bdypassword = #{resBdypassword,jdbcType=VARCHAR},
+      res_360path = #{res360path,jdbcType=VARCHAR},
+      res_360password = #{res360password,jdbcType=VARCHAR},
+      res_locationpath = #{resLocationpath,jdbcType=VARCHAR},
+      downloadnum = #{downloadnum,jdbcType=INTEGER},
+      downloadscore = #{downloadscore,jdbcType=INTEGER},
+      resdate = #{resdate,jdbcType=TIMESTAMP},
+      resstate = #{resstate,jdbcType=INTEGER},
+      resdiscuss = #{resdiscuss,jdbcType=INTEGER},
+      resclass_id = #{resclassId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

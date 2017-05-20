@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.NetPurlMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.NetPurl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="np_title" property="npTitle" jdbcType="VARCHAR" />
+    <result column="np_url" property="npUrl" jdbcType="VARCHAR" />
+    <result column="np_descriptions" property="npDescriptions" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+    <!-- 
+  		@author Chitry 
+  		@title 网站静态图片信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, np_title, np_url, np_descriptions
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_netpurl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select id, np_title, np_url, np_descriptions
+    from j_netpurl
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_netpurl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.NetPurl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_netpurl (id, np_title, np_url, 
+      np_descriptions)
+    values (#{id,jdbcType=INTEGER}, #{npTitle,jdbcType=VARCHAR}, #{npUrl,jdbcType=VARCHAR}, 
+      #{npDescriptions,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.NetPurl" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_netpurl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="npTitle != null" >
+        np_title,
+      </if>
+      <if test="npUrl != null" >
+        np_url,
+      </if>
+      <if test="npDescriptions != null" >
+        np_descriptions,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="npTitle != null" >
+        #{npTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="npUrl != null" >
+        #{npUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="npDescriptions != null" >
+        #{npDescriptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.NetPurl" >
+    update j_netpurl
+    <set >
+      <if test="npTitle != null" >
+        np_title = #{npTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="npUrl != null" >
+        np_url = #{npUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="npDescriptions != null" >
+        np_descriptions = #{npDescriptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.NetPurl" >
+    update j_netpurl
+    set np_title = #{npTitle,jdbcType=VARCHAR},
+      np_url = #{npUrl,jdbcType=VARCHAR},
+      np_descriptions = #{npDescriptions,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

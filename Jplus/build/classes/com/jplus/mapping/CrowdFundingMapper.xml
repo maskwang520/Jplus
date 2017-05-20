@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.CrowdFundingMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.CrowdFunding" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cd_type" property="cdType" jdbcType="INTEGER" />
+    <result column="cd_name" property="cdName" jdbcType="VARCHAR" />
+    <result column="cd_championprize" property="cdChampionprize" jdbcType="VARCHAR" />
+    <result column="cd_secondprize" property="cdSecondprize" jdbcType="VARCHAR" />
+    <result column="cd_thirdprize" property="cdThirdprize" jdbcType="VARCHAR" />
+    <result column="cd_sponsor_id" property="cdSponsorId" jdbcType="INTEGER" />
+    <result column="cd_dotime" property="cdDotime" jdbcType="TIMESTAMP" />
+    <result column="cd_starttime" property="cdStarttime" jdbcType="TIMESTAMP" />
+    <result column="cd_endtime" property="cdEndtime" jdbcType="TIMESTAMP" />
+    <result column="cd_champion_id" property="cdChampionId" jdbcType="INTEGER" />
+    <result column="cd_second_id" property="cdSecondId" jdbcType="INTEGER" />
+    <result column="cd_third_id" property="cdThirdId" jdbcType="INTEGER" />
+    <result column="cd_state" property="cdState" jdbcType="INTEGER" />
+    <result column="cd_redonum" property="cdRedonum" jdbcType="INTEGER" />
+    <result column="cd_discuss" property="cdDiscuss" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jplus.model.CrowdFunding" extends="BaseResultMap" >
+    <result column="cd_description" property="cdDescription" jdbcType="LONGVARCHAR" />
+    <result column="cd_content" property="cdContent" jdbcType="LONGVARCHAR" />
+    <result column="cd_enddescr" property="cdEnddescr" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title 众筹赛场信息表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  <sql id="Base_Column_List" >
+    id, cd_type, cd_name, cd_championprize, cd_secondprize, cd_thirdprize, cd_sponsor_id, 
+    cd_dotime, cd_starttime, cd_endtime, cd_champion_id, cd_second_id, cd_third_id, cd_state, 
+    cd_redonum, cd_discuss
+  </sql>
+  
+  <sql id="Blob_Column_List" >
+    cd_description, cd_content, cd_enddescr
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from j_crowdfunding
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, cd_type, cd_name, cd_championprize, cd_secondprize, cd_thirdprize, cd_sponsor_id, 
+    cd_dotime, cd_starttime, cd_endtime, cd_champion_id, cd_second_id, cd_third_id, cd_state, 
+    cd_redonum, cd_discuss, cd_description, cd_content, cd_enddescr
+    from j_crowdfunding
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_crowdfunding
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.jplus.model.CrowdFunding" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_crowdfunding (id, cd_type, cd_name, 
+      cd_championprize, cd_secondprize, cd_thirdprize, 
+      cd_sponsor_id, cd_dotime, cd_starttime, 
+      cd_endtime, cd_champion_id, cd_second_id, 
+      cd_third_id, cd_state, cd_redonum, 
+      cd_discuss, cd_description, cd_content, 
+      cd_enddescr)
+    values (#{id,jdbcType=INTEGER}, #{cdType,jdbcType=INTEGER}, #{cdName,jdbcType=VARCHAR}, 
+      #{cdChampionprize,jdbcType=VARCHAR}, #{cdSecondprize,jdbcType=VARCHAR}, #{cdThirdprize,jdbcType=VARCHAR}, 
+      #{cdSponsorId,jdbcType=INTEGER}, #{cdDotime,jdbcType=TIMESTAMP}, #{cdStarttime,jdbcType=TIMESTAMP}, 
+      #{cdEndtime,jdbcType=TIMESTAMP}, #{cdChampionId,jdbcType=INTEGER}, #{cdSecondId,jdbcType=INTEGER}, 
+      #{cdThirdId,jdbcType=INTEGER}, #{cdState,jdbcType=INTEGER}, #{cdRedonum,jdbcType=INTEGER}, 
+      #{cdDiscuss,jdbcType=INTEGER}, #{cdDescription,jdbcType=LONGVARCHAR}, #{cdContent,jdbcType=LONGVARCHAR}, 
+      #{cdEnddescr,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.CrowdFunding" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_crowdfunding
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="cdType != null" >
+        cd_type,
+      </if>
+      <if test="cdName != null" >
+        cd_name,
+      </if>
+      <if test="cdChampionprize != null" >
+        cd_championprize,
+      </if>
+      <if test="cdSecondprize != null" >
+        cd_secondprize,
+      </if>
+      <if test="cdThirdprize != null" >
+        cd_thirdprize,
+      </if>
+      <if test="cdSponsorId != null" >
+        cd_sponsor_id,
+      </if>
+      <if test="cdDotime != null" >
+        cd_dotime,
+      </if>
+      <if test="cdStarttime != null" >
+        cd_starttime,
+      </if>
+      <if test="cdEndtime != null" >
+        cd_endtime,
+      </if>
+      <if test="cdChampionId != null" >
+        cd_champion_id,
+      </if>
+      <if test="cdSecondId != null" >
+        cd_second_id,
+      </if>
+      <if test="cdThirdId != null" >
+        cd_third_id,
+      </if>
+      <if test="cdState != null" >
+        cd_state,
+      </if>
+      <if test="cdRedonum != null" >
+        cd_redonum,
+      </if>
+      <if test="cdDiscuss != null" >
+        cd_discuss,
+      </if>
+      <if test="cdDescription != null" >
+        cd_description,
+      </if>
+      <if test="cdContent != null" >
+        cd_content,
+      </if>
+      <if test="cdEnddescr != null" >
+        cd_enddescr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="cdType != null" >
+        #{cdType,jdbcType=INTEGER},
+      </if>
+      <if test="cdName != null" >
+        #{cdName,jdbcType=VARCHAR},
+      </if>
+      <if test="cdChampionprize != null" >
+        #{cdChampionprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSecondprize != null" >
+        #{cdSecondprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdThirdprize != null" >
+        #{cdThirdprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSponsorId != null" >
+        #{cdSponsorId,jdbcType=INTEGER},
+      </if>
+      <if test="cdDotime != null" >
+        #{cdDotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdStarttime != null" >
+        #{cdStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdEndtime != null" >
+        #{cdEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdChampionId != null" >
+        #{cdChampionId,jdbcType=INTEGER},
+      </if>
+      <if test="cdSecondId != null" >
+        #{cdSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="cdThirdId != null" >
+        #{cdThirdId,jdbcType=INTEGER},
+      </if>
+      <if test="cdState != null" >
+        #{cdState,jdbcType=INTEGER},
+      </if>
+      <if test="cdRedonum != null" >
+        #{cdRedonum,jdbcType=INTEGER},
+      </if>
+      <if test="cdDiscuss != null" >
+        #{cdDiscuss,jdbcType=INTEGER},
+      </if>
+      <if test="cdDescription != null" >
+        #{cdDescription,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cdContent != null" >
+        #{cdContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cdEnddescr != null" >
+        #{cdEnddescr,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.CrowdFunding" >
+    update j_crowdfunding
+    <set >
+      <if test="cdType != null" >
+        cd_type = #{cdType,jdbcType=INTEGER},
+      </if>
+      <if test="cdName != null" >
+        cd_name = #{cdName,jdbcType=VARCHAR},
+      </if>
+      <if test="cdChampionprize != null" >
+        cd_championprize = #{cdChampionprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSecondprize != null" >
+        cd_secondprize = #{cdSecondprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdThirdprize != null" >
+        cd_thirdprize = #{cdThirdprize,jdbcType=VARCHAR},
+      </if>
+      <if test="cdSponsorId != null" >
+        cd_sponsor_id = #{cdSponsorId,jdbcType=INTEGER},
+      </if>
+      <if test="cdDotime != null" >
+        cd_dotime = #{cdDotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdStarttime != null" >
+        cd_starttime = #{cdStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdEndtime != null" >
+        cd_endtime = #{cdEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdChampionId != null" >
+        cd_champion_id = #{cdChampionId,jdbcType=INTEGER},
+      </if>
+      <if test="cdSecondId != null" >
+        cd_second_id = #{cdSecondId,jdbcType=INTEGER},
+      </if>
+      <if test="cdThirdId != null" >
+        cd_third_id = #{cdThirdId,jdbcType=INTEGER},
+      </if>
+      <if test="cdState != null" >
+        cd_state = #{cdState,jdbcType=INTEGER},
+      </if>
+      <if test="cdRedonum != null" >
+        cd_redonum = #{cdRedonum,jdbcType=INTEGER},
+      </if>
+      <if test="cdDiscuss != null" >
+        cd_discuss = #{cdDiscuss,jdbcType=INTEGER},
+      </if>
+      <if test="cdDescription != null" >
+        cd_description = #{cdDescription,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cdContent != null" >
+        cd_content = #{cdContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cdEnddescr != null" >
+        cd_enddescr = #{cdEnddescr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jplus.model.CrowdFunding" >
+    update j_crowdfunding
+    set cd_type = #{cdType,jdbcType=INTEGER},
+      cd_name = #{cdName,jdbcType=VARCHAR},
+      cd_championprize = #{cdChampionprize,jdbcType=VARCHAR},
+      cd_secondprize = #{cdSecondprize,jdbcType=VARCHAR},
+      cd_thirdprize = #{cdThirdprize,jdbcType=VARCHAR},
+      cd_sponsor_id = #{cdSponsorId,jdbcType=INTEGER},
+      cd_dotime = #{cdDotime,jdbcType=TIMESTAMP},
+      cd_starttime = #{cdStarttime,jdbcType=TIMESTAMP},
+      cd_endtime = #{cdEndtime,jdbcType=TIMESTAMP},
+      cd_champion_id = #{cdChampionId,jdbcType=INTEGER},
+      cd_second_id = #{cdSecondId,jdbcType=INTEGER},
+      cd_third_id = #{cdThirdId,jdbcType=INTEGER},
+      cd_state = #{cdState,jdbcType=INTEGER},
+      cd_redonum = #{cdRedonum,jdbcType=INTEGER},
+      cd_discuss = #{cdDiscuss,jdbcType=INTEGER},
+      cd_description = #{cdDescription,jdbcType=LONGVARCHAR},
+      cd_content = #{cdContent,jdbcType=LONGVARCHAR},
+      cd_enddescr = #{cdEnddescr,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.CrowdFunding" >
+    update j_crowdfunding
+    set cd_type = #{cdType,jdbcType=INTEGER},
+      cd_name = #{cdName,jdbcType=VARCHAR},
+      cd_championprize = #{cdChampionprize,jdbcType=VARCHAR},
+      cd_secondprize = #{cdSecondprize,jdbcType=VARCHAR},
+      cd_thirdprize = #{cdThirdprize,jdbcType=VARCHAR},
+      cd_sponsor_id = #{cdSponsorId,jdbcType=INTEGER},
+      cd_dotime = #{cdDotime,jdbcType=TIMESTAMP},
+      cd_starttime = #{cdStarttime,jdbcType=TIMESTAMP},
+      cd_endtime = #{cdEndtime,jdbcType=TIMESTAMP},
+      cd_champion_id = #{cdChampionId,jdbcType=INTEGER},
+      cd_second_id = #{cdSecondId,jdbcType=INTEGER},
+      cd_third_id = #{cdThirdId,jdbcType=INTEGER},
+      cd_state = #{cdState,jdbcType=INTEGER},
+      cd_redonum = #{cdRedonum,jdbcType=INTEGER},
+      cd_discuss = #{cdDiscuss,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

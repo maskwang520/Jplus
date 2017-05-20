@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jplus.dao.JplusDescMapper" >
+  <resultMap id="BaseResultMap" type="com.jplus.model.JplusDesc" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="jd_title" property="jdTitle" jdbcType="VARCHAR" />
+    <result column="jd_reltime" property="jdReltime" jdbcType="TIMESTAMP" />
+    <result column="jd_author" property="jdAuthor" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jplus.model.JplusDesc" extends="BaseResultMap" >
+    <result column="jd_content" property="jdContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+    <!-- 
+  		@author Chitry 
+  		@title Jplus简介表 数据库操作
+  		@time  2015.07.22
+  -->
+  
+  
+  
+  
+ 
+ 
+   
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+     id, jd_title, jd_reltime, jd_author,jd_content
+    from j_jplusdesc
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+    <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    select
+    id, jd_title, jd_reltime, jd_author,jd_content
+    from j_jplusdesc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_jplusdesc
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.jplus.model.JplusDesc" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_jplusdesc (id, jd_title, jd_reltime, 
+      jd_author, jd_content)
+    values (#{id,jdbcType=INTEGER}, #{jdTitle,jdbcType=VARCHAR}, #{jdReltime,jdbcType=TIMESTAMP}, 
+      #{jdAuthor,jdbcType=VARCHAR}, #{jdContent,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.jplus.model.JplusDesc" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into j_jplusdesc
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="jdTitle != null" >
+        jd_title,
+      </if>
+      <if test="jdReltime != null" >
+        jd_reltime,
+      </if>
+      <if test="jdAuthor != null" >
+        jd_author,
+      </if>
+      <if test="jdContent != null" >
+        jd_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=INTEGER},
+      <if test="jdTitle != null" >
+        #{jdTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="jdReltime != null" >
+        #{jdReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jdAuthor != null" >
+        #{jdAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="jdContent != null" >
+        #{jdContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.jplus.model.JplusDesc" >
+    update j_jplusdesc
+    <set >
+      <if test="jdTitle != null" >
+        jd_title = #{jdTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="jdReltime != null" >
+        jd_reltime = #{jdReltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jdAuthor != null" >
+        jd_author = #{jdAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="jdContent != null" >
+        jd_content = #{jdContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jplus.model.JplusDesc" >
+    update j_jplusdesc
+    set jd_title = #{jdTitle,jdbcType=VARCHAR},
+      jd_reltime = #{jdReltime,jdbcType=TIMESTAMP},
+      jd_author = #{jdAuthor,jdbcType=VARCHAR},
+      jd_content = #{jdContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateByPrimaryKey" parameterType="com.jplus.model.JplusDesc" >
+    update j_jplusdesc
+    set jd_title = #{jdTitle,jdbcType=VARCHAR},
+      jd_reltime = #{jdReltime,jdbcType=TIMESTAMP},
+      jd_author = #{jdAuthor,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
